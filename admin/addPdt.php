@@ -128,7 +128,8 @@ if(isset($_POST['addCol'])){
         }
         
         
-        if($czColor == $czCol && $czSize == $czSz && $czBrand == $czBrd){
+    
+        if($czCol == $czColor && $czSz == $czSize && $czBrd == $czBrand){
         
         $errors[].= "Duplicate! Product already exist in the database!";
         
@@ -215,7 +216,7 @@ if(isset($_POST['addDSz'])){
         }
         
         
-        if($dProd == $dBrd){
+        if($dBrd == $dProd){
         
         $errors[].= "Duplicate! Product already exist in the database!";
         
