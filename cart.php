@@ -34,7 +34,7 @@ include("functions.php");
                                     
                                   <tr>
                                       <td><img src="images/Brace2.jpg" alt="" style="height:150px;"></td>
-                                      <td>Test Test</td>
+                                      <td>Test Test Test</td>
                                       <td> <input type="number" name="qty" id="qty" value="" class="form-control" min="0" style="width:80px;"></td>
                                       <td><?= money(150000)?></td>
                                   </tr>

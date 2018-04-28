@@ -3,6 +3,7 @@ include("core/connect.php");
 include("includes/head.php");
 include("includes/navigation.php");
 include("includes/carousel.php");
+include("functions.php");
 
 
 
@@ -16,6 +17,7 @@ $frst = $conn->query($fqry);
 
 $cqry = "SELECT * FROM categories";
 $crst = $conn->query($cqry);
+
 
 //Default Attribute 
 $pdtAttr = "SELECT * FROM products WHERE attribute = 'Default'";
@@ -78,73 +80,62 @@ $colszrst = $conn->query($colszAttr);
  <div class="container-fluid">
      <div class="row">
          <h2 class="text-center">Featured Products</h2>
+         
          <div class="col-md-3">
-            <div class="panel-group" id="accordion" style="margin-left:10px; broder-radius:0;">
-               <div class="panel panel-default">
-                    <div class="panel-heading" style="background-color: #232f3e; color:white;">
-                      <h4 class="panel-title">
-                        <a data-toggle="collapse" href="#collapse1" style="text-decoration: none; font-size: 12px;">Shop By Products ~ Defaults</a>
-                      </h4>
-                    </div>
-                    <div id="collapse1" class="panel-collapse collapse">
-                      <ul class="list-group">
-                          <?php
-                              while($drow = mysqli_fetch_array($datrst)){ 
-                              $dprodt = $drow['product'];
-                          ?>
-                        <a href="product.php?default=<?= $drow['id'];?>" style="text-decoration:none; hover:blue;" class="list-group-item"><?= $dprodt; ?></a>
-                        <?php }?>
-                      </ul>
-                    </div>
-                  </div>
-                
-                 <div class="panel panel-default">
-                    <div class="panel-heading" style="background-color: #232f3e; color:white;">
-                      <h4 class="panel-title">
-                        <a data-toggle="collapse" href="#collapse2" style="text-decoration: none; font-size: 12px;">Shop By Products ~ Varieties</a>
-                      </h4>
-                    </div>
-                    <div id="collapse2" class="panel-collapse collapse">
-                      <ul class="list-group">
-                         <?php
-                              while($crow = mysqli_fetch_array($colrst)){ 
-                              $colpdt = $crow['product'];
-                          ?>
-                        <a href="product.php?color=<?= $crow['id'];?>" style="text-decoration:none; hover:blue;" class="list-group-item"><?= $colpdt; ?></a>
-                        <?php }?>
-                      </ul>
-                    </div>
-                  </div>
-                  
-                  
-                   <div class="panel panel-default">
-                    <div class="panel-heading" style="background-color: #232f3e; color:white;">
-                      <h4 class="panel-title">
-                        <a data-toggle="collapse" href="#collapse3" style="text-decoration: none; font-size: 12px;">Shop By Products ~ Color/Sizes</a>
-                      </h4>
-                    </div>
-                    <div id="collapse3" class="panel-collapse collapse">
-                      <ul class="list-group">
-                         <?php
-                              while($czrow = mysqli_fetch_array($colszrst)){ 
-                              $colszpdt = $czrow['product'];
-                          ?>
-                        <a href="product.php?colsz=<?= $czrow['id'];?>" style="text-decoration:none;" class="list-group-item"><?= $colszpdt; ?></a>
-                       <?php }?>
-                      </ul>
-                    </div>
-                  </div>
-                   
+             
+<!--             <div class="well well-sm" style="margin-left:5px;"><a href="" style="text-decoration:none;"><i class="fas fa-shopping-cart"></i> 2 Item(s) in your cart. <span class="badge badge-warning pull-right"> <?php echo money(132);?></span></a></div>-->
+             
+             <div class="panel panel-default" style="margin-left:5px;" >
+              <div class="panel-body">
+               <i class="fas fa-shopping-cart" style="color:#232f3e;"></i> 2 Item(s) in your cart.
+                <span class="badge pull-right" style="background:orange;"> <?php echo money(132);?></span>
+              </div>
             </div>
+
+            
+              <div class="panel-group" id="accordion" style="margin-left:5px;">
+                
+                 <?php 
+                  $caqry = "SELECT * FROM subcategories";
+                  $carst = $conn->query($caqry);
+                  $count = 1;
+                  while($cate = mysqli_fetch_array($carst)){
+                    $sid = $cate['id']
+                  ?>
+                  <div class="panel panel-default">
+                    <div class="panel-heading" style="background:#f6f6f6; color:#232f3e;">
+                      <h4 class="panel-title" >
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse<?=$count;?>" style="text-decoration:none;">
+                         <?= $cate['subcategories'];?> <span class="glyphicon glyphicon-chevron-down pull-right" style="color:#232f3e;"></span></a>
+                      </h4>
+                    </div>
+                    <div id="collapse<?=$count;?>" class="panel-collapse collapse out">
+                      <div class="list-group">
+                      <?php 
+                      $subQry = "SELECT * FROM products WHERE subID = '$sid'";
+                      $subRst = $conn->query($subQry);
+
+                      while($subRow = mysqli_fetch_array($subRst)){?>
+                      <a href="" style="text-decoration:none;"><button type="button" class="list-group-item"><?= $subRow['product']; ?><span class="badge"><?=$subRow['quantity'];?></span></button></a>
+                       <?php }?>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <?php $count++; }?>
+                 
+                </div>
+             
+  
           </div>
            
         
         <div class="col-md-9">
            <div class="row">
                  <?php while($prod=mysqli_fetch_array($frst)){?>
-                  <div class="col-md-4 col-lg-3">
-                        <div class="thumbnail" style="border:0; background:#F6F6F6; padding-top:0px;">
-                            <a href="" name="view"><h5 style="text-align:center;"><img src="<?php echo 'images/'.$prod['image'];?>" alt="" style="width:auto;" class="img-responsive"></h5>
+                  <div class="col-md-5 col-lg-3">
+                        <div class="thumbnail" style="border:0; background:white; padding-top:0px;" style="background:white;">
+                            <a href="" name="view" style="text-decoration:none;"><h5 style="text-align:center;"><img src="<?php echo 'images/'.$prod['image'];?>" alt="" style="width:auto;" class="img-responsive"></h5>
                             <h4 style="text-align:center; color:#232f3e;" name="view"><?php echo $prod['product'];?></h4></a>
                             <center><button type="button" class="btn btn-xs btn-warning">Buy Now</button></center>
                         </div> 
